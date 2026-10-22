@@ -57,9 +57,9 @@ const today = () => new Date().toISOString().slice(0, 10);
 
 export const TEMPLATES: Template[] = [
   {
-    id: "brent-cross",
+    id: "town-tower",
     name: "Town tower",
-    note: "Example values from the Brent Cross Town Plot 202 loads report (§2.2–2.3): vb,map 21.6 m/s, A = 48 m, 28 m high, 55 × 60 m, rotated −41°, funnelling gaps 27.5–28 m.",
+    note: "Example values for a tower in town terrain with a neighbouring building close by, so funnelling applies. Replace every value with your site's data.",
     project: {
       meta: {
         project: "Example: town tower",
@@ -67,50 +67,50 @@ export const TEMPLATES: Template[] = [
         client: "",
         preparedBy: "",
         date: today(),
-        siteNotes: "Example values. Town terrain at the edge of the urban area; no significant orography.",
+        siteNotes: "Example values. Town terrain; no significant orography.",
       },
-      site: { vbMap: 21.6, altitude: 48, terrain: "town", orientation: -41, cdirMethod: "orthogonal" },
+      site: { vbMap: 21.5, altitude: 30, terrain: "town", orientation: -20, cdirMethod: "orthogonal" },
       options: { funnelling: "conservative", designBasis: "custom" },
       blocks: [
         {
-          id: "bx",
-          name: "Cores E & F",
-          building: { widthNS: 55, widthEW: 60, height: 28 },
+          id: "tower",
+          name: "Tower",
+          building: { widthNS: 30, widthEW: 45, height: 36 },
           directions: {
-            N: { shorelineKm: 100, townKm: 0.1, have: 0, x: 20, gap: 28 },
-            E: { shorelineKm: 60, townKm: 0.1, have: 0, x: 20, gap: 27.5 },
-            S: { shorelineKm: 100, townKm: 0.1, have: 0, x: 20, gap: 28 },
-            W: { shorelineKm: 100, townKm: 0.1, have: 0, x: 20, gap: 27.5 },
+            N: { shorelineKm: 80, townKm: 2, have: 0, x: 20, gap: 25 },
+            E: { shorelineKm: 60, townKm: 2, have: 0, x: 20, gap: 40 },
+            S: { shorelineKm: 90, townKm: 2, have: 0, x: 20, gap: 25 },
+            W: { shorelineKm: 100, townKm: 2, have: 0, x: 20, gap: 40 },
           },
         },
       ],
     },
   },
   {
-    id: "isca",
+    id: "low-rise",
     name: "Low-rise blocks",
-    note: "Example values from the ISCA Place spreadsheet (Block A): vb,map 23.5 m/s, A = 43 m, 17.66 m high, orientation −10°, neighbours 17 m high. Distances inside town are example values (not in the source).",
+    note: "Example values for a low-rise block among buildings of similar height in town terrain. Replace every value with your site's data.",
     project: {
       meta: {
-        project: "Example: low-rise residential blocks",
+        project: "Example: low-rise blocks",
         reference: "WL-0002",
         client: "",
         preparedBy: "",
         date: today(),
-        siteNotes: "Example values. Town terrain (category III); shoreline distances N 55, E 43, S 25, W 80 km.",
+        siteNotes: "Example values. Town terrain; neighbouring buildings about 12 m high.",
       },
-      site: { vbMap: 23.5, altitude: 43, terrain: "town", orientation: -10, cdirMethod: "orthogonal" },
+      site: { vbMap: 22.5, altitude: 25, terrain: "town", orientation: 15, cdirMethod: "orthogonal" },
       options: { funnelling: "conservative", designBasis: "custom" },
       blocks: [
         {
-          id: "isca-a",
+          id: "block-a",
           name: "Block A",
-          building: { widthNS: 16.8, widthEW: 44.8, height: 17.66 },
+          building: { widthNS: 15, widthEW: 40, height: 15 },
           directions: {
-            N: { shorelineKm: 55, townKm: 3, have: 17, x: 27.1, gap: 27.1 },
-            E: { shorelineKm: 43, townKm: 3, have: 17, x: 104, gap: 4.8 },
-            S: { shorelineKm: 25, townKm: 3, have: 17, x: 122, gap: 122 },
-            W: { shorelineKm: 80, townKm: 3, have: 17, x: 11.2, gap: 11.2 },
+            N: { shorelineKm: 30, townKm: 1.5, have: 12, x: 25, gap: 25 },
+            E: { shorelineKm: 50, townKm: 1.5, have: 12, x: 60, gap: 6 },
+            S: { shorelineKm: 40, townKm: 1.5, have: 12, x: 80, gap: 80 },
+            W: { shorelineKm: 70, townKm: 1.5, have: 12, x: 12, gap: 12 },
           },
         },
       ],

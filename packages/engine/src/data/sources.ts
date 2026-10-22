@@ -4,8 +4,8 @@ export const DOCUMENTS = {
   NA: { title: "NA to BS EN 1991-1-4:2005+A1:2010 UK National Annex to Eurocode 1: Actions on structures — Part 1-4: Wind actions" },
   PD: { title: "PD 6688-1-4:2015 Background information to the National Annex to BS EN 1991-1-4 and additional guidance" },
   CWCT: { title: "CWCT Standard for systemised building envelopes, Part 2: Loads, fixings and movement" },
-  BX: { title: "Example report: Brent Cross Town Plot 202, Loads and load combinations, Glass & Façade Solutions, 24 June 2022" },
-  ISCA: { title: "Example report and spreadsheet: ISCA Place, Exeter, Wind load calculation report, Glass & Façade Solutions, May 2026" },
+  RA: { title: "Report A: confidential project wind load report (validation only)" },
+  RB: { title: "Report B: confidential project wind load report and spreadsheet (validation only)" },
 } as const;
 
 export type DocId = keyof typeof DOCUMENTS;

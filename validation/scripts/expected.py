@@ -73,10 +73,10 @@ def write(name, case):
         fh.write("\n")
 
 
-# --- Case 1: Brent Cross Town Plot 202, cores E & F (BX §2.3, p.10) -----------------------------
-bx = {
+# --- Case 1: Report A, main cladding (RA §2.3, p.10) -----------------------------
+ra = {
     "site": {"vbMap": 21.6, "altitude": 48, "terrain": "town", "orientation": -41},
-    "building": {"name": "Brent Cross Plot 202 cores E & F", "widthNS": 55, "widthEW": 60, "height": 28},
+    "building": {"name": "Report A main block", "widthNS": 55, "widthEW": 60, "height": 28},
     "directions": {
         # Printed ce readings; dT = 0.1 km gives ce,T = 1.00; have = 0 so hdis = 0.
         "N": {"shorelineKm": 100, "townKm": 0.1, "have": 0, "x": 20, "gap": 28, "overrides": {"ce": 2.99, "ceT": 1.0}},
@@ -89,7 +89,7 @@ bx = {
 exp = {}
 printed = {}
 for i, f in enumerate("NESW"):
-    r = direction(bx, f)
+    r = direction(ra, f)
     exp[f"directions.{i}.cdir"] = r["cdir"]
     exp[f"directions.{i}.top.vb"] = r["vb"]
     exp[f"directions.{i}.top.qp"] = r["qp"]
@@ -112,23 +112,23 @@ printed = {
     "wnet,D": "0.91, 0.95, 0.70, 0.57",
     "wnet,E": "-0.49, -0.52, -0.38, -0.32",
 }
-write("01-brent-cross-plot-202.json", {
-    "name": "Brent Cross Town Plot 202, main cladding of cores E & F (BX §2.3)",
+write("01-project-report-a.json", {
+    "name": "Report A, main cladding (RA §2.3)",
     "description": "Town site, vb,map 21.6 m/s, A = 48 m, h = 28 m, 55 × 60 m plan rotated -41°, funnelling on all faces, cpi +0.2/-0.3. The report's ce readings are entered by hand; cdir, cpe and the net pressures are calculated.",
     "reference": {
-        "source": "BX §2.3 table, p.10",
+        "source": "RA §2.3 table, p.10",
         "printed": printed,
         "gap": "All printed values agree to the second decimal, allowing for the report truncating rather than rounding some values (qp N 0.8856 printed 0.88). Without the overrides, the digitised Figure NA.7 gives ce = 2.991 (N, S, W) and 3.034 (E, 60 km) against the printed 2.99 and 3.01; the E reading differs by 0.8%, within chart reading tolerance (OQ-01).",
     },
-    "input": bx,
+    "input": ra,
     "expected": exp,
     "tolerance": {"relative": 1e-5},
 })
 
-# --- Case 2: ISCA Place, Exeter, Block A (ISCA spreadsheet, sheet "Block A") ---------------------
-isca = {
+# --- Case 2: Report B, Block A (Report B spreadsheet, sheet "Block A") ---------------------
+rb = {
     "site": {"vbMap": 23.5, "altitude": 43, "terrain": "town", "orientation": -10},
-    "building": {"name": "ISCA Place Block A", "widthNS": 16.8, "widthEW": 35.32, "height": 17.66},
+    "building": {"name": "Report B Block A", "widthNS": 16.8, "widthEW": 35.32, "height": 17.66},
     "directions": {
         "N": {"shorelineKm": 55, "townKm": 5, "have": 17, "x": 27.1, "overrides": {"cdir": 0.91, "ce": 2.12, "ceT": 0.73, "hdis": 10.2}},
         "E": {"shorelineKm": 43, "townKm": 5, "have": 17, "x": 104, "overrides": {"cdir": 0.74, "ce": 2.8, "ceT": 0.82, "hdis": 0}},
@@ -138,18 +138,18 @@ isca = {
 }
 exp = {}
 for i, f in enumerate("NESW"):
-    r = direction(isca, f)
+    r = direction(rb, f)
     exp[f"directions.{i}.top.qp"] = r["qp"]
     exp[f"directions.{i}.top.calt"] = calt(43, 17.66)
-write("02-isca-place-block-a.json", {
-    "name": "ISCA Place, Exeter, Block A peak velocity pressures (ISCA spreadsheet)",
+write("02-project-report-b.json", {
+    "name": "Report B, Block A peak velocity pressures (Report B spreadsheet)",
     "description": "Town site, vb,map 23.5 m/s, A = 43 m, z = 17.66 m, orientation -10°. The spreadsheet's cdir, ce, ce,T and hdis are entered by hand; qp is compared.",
     "reference": {
-        "source": "ISCA spreadsheet, sheet Block A, rows 3-22",
+        "source": "Report B spreadsheet, sheet Block A, rows 3-22",
         "printed": {"qp N, E, S, W (kN/m²)": "0.4769, 0.4679, 0.7390, 0.5705", "rho (kg/m³)": 1.25},
         "gap": "The spreadsheet uses ρ = 1.25 kg/m³ (EN recommended value); the UK NA.2.18 value is 1.226, so the engine's qp is 1.226/1.25 = 0.9808 of the spreadsheet's. The spreadsheet also takes hdis = 0.6·have = 10.2 m where A.15 gives min(0.8·have, 0.6·h) = 10.6 m, and reads cdir at the tabulated direction nearest the normal rather than the maximum within ±45° (e.g. N 0.91 against 0.895); both are entered as printed here. Its cpe values are fixed (E = -0.6) rather than interpolated in h/d, and are not compared.",
     },
-    "input": isca,
+    "input": rb,
     "expected": exp,
     "tolerance": {"relative": 1e-5},
 })

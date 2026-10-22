@@ -71,16 +71,22 @@ function table(rows: TableRow[], columnWidths?: number[]) {
 }
 
 /** Summary rows for one envelope: Wp, Ws corner (width), Ws general per elevation. */
-function summaryRows(r: Ok, env: Envelope, label: string, shade: string): TableRow[] {
-  const rows: TableRow[] = [];
+export function summaryLines(r: Ok, env: Envelope): [string, string[]][] {
   const s = (f: (typeof r.elevations)[number]) => f.summary[env];
-  const line = (name: string, get: (e: (typeof r.elevations)[number]) => string) =>
-    new TableRow({ children: [cell(rows.length === 0 ? label : "", { shade, bold: true }), cell(name), ...r.elevations.map((e) => cell(get(e), { align: "center" })), cell("kN/m²", { align: "center" })] });
-  rows.push(line("Wind pressure Wp", (e) => signed(s(e).wp.design)));
-  rows.push(line("Corner suction Ws (zone A)", (e) => signed(s(e).wsA.design)));
-  rows.push(line("Corner zone width", (e) => `${fmt(s(e).cornerWidth, 2)} m`));
-  rows.push(line("General suction Ws", (e) => signed(s(e).ws.design)));
-  return rows;
+  return [
+    ["Wind pressure Wp", r.elevations.map((e) => signed(s(e).wp.design))],
+    ["Corner suction Ws (zone A)", r.elevations.map((e) => signed(s(e).wsA.design))],
+    ["Corner zone width", r.elevations.map((e) => `${fmt(s(e).cornerWidth, 2)} m`)],
+    ["General suction Ws", r.elevations.map((e) => signed(s(e).ws.design))],
+  ];
+}
+
+export const envelopeLabel = (r: Ok, env: "ventilated" | "sealed") => (env === "ventilated" ? "Solid / rainscreen (cpi = 0)" : `Glazed (cpi +${r.cpi.positive} / ${r.cpi.negative})`);
+
+function summaryRows(r: Ok, env: "ventilated" | "sealed", shade: string): TableRow[] {
+  return summaryLines(r, env).map(([name, vals], i) =>
+    new TableRow({ children: [cell(i === 0 ? envelopeLabel(r, env) : "", { shade, bold: true }), cell(name), ...vals.map((v) => cell(v, { align: "center" })), cell("kN/m²", { align: "center" })] }),
+  );
 }
 
 function summaryTable(r: Ok) {
@@ -89,28 +95,23 @@ function summaryTable(r: Ok) {
       tableHeader: true,
       children: [cell("Envelope", { header: true }), cell("Design value", { header: true }), ...r.elevations.map((e) => cell(`${FACE_NAMES[e.face]}`, { header: true, align: "center" })), cell("Unit", { header: true })],
     }),
-    ...summaryRows(r, "ventilated", "Solid / rainscreen (cpi = 0)", "DCEBFA"),
-    ...summaryRows(r, "sealed", `Glazed (cpi +${r.cpi.positive} / ${r.cpi.negative})`, "FFF4C2"),
+    ...summaryRows(r, "ventilated", "DCEBFA"),
+    ...summaryRows(r, "sealed", "FFF4C2"),
   ], [1900, 2300, 1100, 1100, 1100, 1100, 1200]);
 }
 
 /** Appendix table in the layout of the calculation spreadsheet: one column per wind direction. */
-function appendixTable(project: Project, b: ReportBlock) {
+export function appendixRows(project: Project, b: ReportBlock): string[][] {
   const r = b.result;
-  const d = (f: (x: DirectionResult) => string) => r.directions.map((x) => cell(f(x), { align: "center" }));
-  const dirIn = (f: (k: (typeof FACES)[number]) => string) => FACES.map((k) => cell(f(k), { align: "center" }));
+  const d = (f: (x: DirectionResult) => string) => r.directions.map(f);
+  const dirIn = (f: (k: (typeof FACES)[number]) => string) => FACES.map(f);
   const block = project.blocks.find((x) => x.name === b.name);
-  const row = (factor: string, sym: string, vals: TableCell[], unit: string, ref: string) =>
-    new TableRow({ children: [cell(factor), cell(sym, { align: "center" }), ...vals, cell(unit, { align: "center" }), cell(ref)] });
+  const row = (factor: string, sym: string, vals: string[], unit: string, ref: string) => [factor, sym, ...vals, unit, ref];
   const step = (x: DirectionResult, s: string) => x.top.steps.find((t) => t.symbol === s)?.value ?? NaN;
-  const rows = [
-    new TableRow({
-      tableHeader: true,
-      children: [cell("Factor", { header: true }), cell("Symbol", { header: true }), ...FACES.map((f) => cell(`Wind onto ${f}`, { header: true, align: "center" })), cell("Unit", { header: true }), cell("Reference", { header: true })],
-    }),
-    row("Basic map wind velocity", "vb,map", FACES.map(() => cell(fmt(project.site.vbMap, 1), { align: "center" })), "m/s", "NA Fig. NA.1"),
-    row("Site altitude", "A", FACES.map(() => cell(fmt(project.site.altitude, 1), { align: "center" })), "m", "NA.2.5"),
-    row("Reference height", "ze", FACES.map(() => cell(fmt(b.height, 2), { align: "center" })), "m", "EN 7.2.2, NA.2.26"),
+  return [
+    row("Basic map wind velocity", "vb,map", FACES.map(() => fmt(project.site.vbMap, 1)), "m/s", "NA Fig. NA.1"),
+    row("Site altitude", "A", FACES.map(() => fmt(project.site.altitude, 1)), "m", "NA.2.5"),
+    row("Reference height", "ze", FACES.map(() => fmt(b.height, 2)), "m", "EN 7.2.2, NA.2.26"),
     row("Altitude factor", "calt", d((x) => fmt(x.top.calt, 3)), "", "NA.2.5"),
     row("Fundamental basic wind velocity", "vb,0", d((x) => fmt(x.top.vb0, 2)), "m/s", "NA.2.4"),
     row("Wind direction", "θ", d((x) => fmt(x.azimuth, 0)), "°", "Orientation"),
@@ -141,43 +142,101 @@ function appendixTable(project: Project, b: ReportBlock) {
     row("Zone A length", "e/5", d((x) => fmt(x.e / 5, 2)), "m", "EN Fig. 7.5"),
     row("Zone B length to", "e", d((x) => fmt(Math.min(x.e, x.d), 2)), "m", "EN Fig. 7.5"),
   ];
-  return table(rows, [2700, 1000, 950, 950, 950, 950, 750, 1650]);
 }
 
-function funnelTable(b: ReportBlock) {
-  const rows = [
-    new TableRow({
-      tableHeader: true,
-      children: ["Elevation", "Wind onto", "Gap (m)", "ef (m)", "ef/4 (m)", "Funnelling", "Factor"].map((t) => cell(t, { header: true, align: "center" })),
-    }),
-  ];
+export const APPENDIX_HEAD = ["Factor", "Symbol", ...FACES.map((f) => `Wind onto ${f}`), "Unit", "Reference"];
+
+function appendixTable(project: Project, b: ReportBlock) {
+  return table(
+    [
+      new TableRow({ tableHeader: true, children: APPENDIX_HEAD.map((t, i) => cell(t, { header: true, align: i >= 2 && i < 6 ? "center" : "left" })) }),
+      ...appendixRows(project, b).map((r) => new TableRow({ children: r.map((t, i) => cell(t, { align: i >= 1 && i < 7 ? "center" : "left" })) })),
+    ],
+    [2700, 1000, 950, 950, 950, 950, 750, 1650],
+  );
+}
+
+export const FUNNEL_HEAD = ["Elevation", "Wind onto", "Gap (m)", "ef (m)", "ef/4 (m)", "Funnelling", "Factor"];
+
+export function funnelRows(b: ReportBlock): string[][] {
+  const rows: string[][] = [];
   for (const el of b.result.elevations) {
     const seen = new Set<string>();
     for (const c of el.cases) {
       if (!c.funnel || seen.has(c.windOnto)) continue;
       seen.add(c.windOnto);
-      rows.push(
-        new TableRow({
-          children: [
-            cell(FACE_NAMES[el.face]),
-            cell(c.windOnto, { align: "center" }),
-            cell(fmt(c.funnel.gap, 2), { align: "center" }),
-            cell(fmt(c.funnel.ef, 2), { align: "center" }),
-            cell(fmt(c.funnel.ef / 4, 2), { align: "center" }),
-            cell(c.funnel.disregarded ? "Disregarded (sheltered)" : c.funnel.applies ? "Yes" : "No", { align: "center" }),
-            cell(fmt(c.funnel.factor, 2), { align: "center" }),
-          ],
-        }),
-      );
+      rows.push([
+        FACE_NAMES[el.face],
+        c.windOnto,
+        fmt(c.funnel.gap, 2),
+        fmt(c.funnel.ef, 2),
+        fmt(c.funnel.ef / 4, 2),
+        c.funnel.disregarded ? "Disregarded (sheltered)" : c.funnel.applies ? "Yes" : "No",
+        fmt(c.funnel.factor, 2),
+      ]);
     }
   }
-  return rows.length > 1 ? table(rows) : p("No gaps to facing buildings were entered; funnelling is not considered.", { italics: true });
+  return rows;
+}
+
+export const NO_FUNNEL = "No gaps to facing buildings were entered; funnelling is not considered.";
+
+function funnelTable(b: ReportBlock) {
+  const rows = funnelRows(b);
+  if (!rows.length) return p(NO_FUNNEL, { italics: true });
+  return table([
+    new TableRow({ tableHeader: true, children: FUNNEL_HEAD.map((t) => cell(t, { header: true, align: "center" })) }),
+    ...rows.map((r) => new TableRow({ children: r.map((t, i) => cell(t, { align: i === 0 ? "left" : "center" })) })),
+  ]);
+}
+
+/** Report text shared by the Word and PDF reports. */
+export const SUMMARY_INTRO =
+  "Design wind loads are summarised below for solid areas (for example brickwork and rainscreen, cpi = 0) and glazed areas (including internal pressure). Values are the design pressures after the CWCT minimum or banding.";
+
+export function designNote(project: Project): string {
+  return project.options.designBasis === "proprietary"
+    ? "Calculated pressures up to 2400 Pa are banded to 800, 1200, 1600, 2000 or 2400 Pa for proprietary systems, as CWCT Standard for systemised building envelopes Part 2, clause 2.2.4, Table 2.1."
+    : "For wind loads less than ±0.8 kN/m², the minimum design wind load on any element of the works is ±0.8 kN/m², as CWCT Standard for systemised building envelopes Part 2, clause 2.2.4, Table 2.1.";
+}
+
+export function siteBullets(project: Project): string[] {
+  const s = project.site;
+  return [
+    `Site altitude: ${fmt(s.altitude, 1)} m above ordnance datum.`,
+    `Terrain: ${s.terrain === "town" ? "Town (terrain categories III and IV)" : "Country (terrain categories I and II)"} as NA to BS EN 1991-1-4 NA.2.11.`,
+    `Fundamental basic wind velocity before altitude correction vb,map = ${fmt(s.vbMap, 1)} m/s from Figure NA.1 of the UK NA to BS EN 1991-1-4 (10-minute mean at 10 m in Country terrain, annual probability of exceedance 0.02).`,
+    `Orientation: the North elevation faces ${fmt(((s.orientation % 360) + 360) % 360, 0)}° from north.`,
+    "Orography is not significant (NA Figure NA.2).",
+  ];
+}
+
+export const SCOPE = [
+  "The calculation gives the design wind loads on the façade of each block from BS EN 1991-1-4 with the UK National Annex, for the design of cladding, windows, doors, connections, brackets and fixings.",
+  "Pressures are calculated for the four orthogonal wind directions; each elevation takes the most onerous of the windward (zone D), side (zones A, B, C) and leeward (zone E) cases.",
+  "Thermal, movement, seismic and imposed loads are not part of this report.",
+  "Roofs, parapets, canopies, balconies, inset storeys and dominant openings are not covered.",
+];
+
+export function methodology(project: Project): string[] {
+  return [
+    "Peak velocity pressure qp = ce(z)·ce,T·qb (NA.2.17), with qb = ½·ρ·vb² and ρ = 1.226 kg/m³ (NA.2.18). vb = cdir·cseason·cprob·vb,map·calt (EN 4.2, NA.2.4–NA.2.8).",
+    project.site.cdirMethod === "unity"
+      ? "The directional factor is taken as 1.0 for all directions (NA Table NA.1 Note 4)."
+      : "The directional factor is the maximum of NA Table NA.1 within ±45° of the normal to each elevation (Table NA.1 Note 3).",
+    "The displacement height hdis follows BS EN 1991-1-4 A.5 for Town terrain. ce(z) and ce,T are read from NA Figures NA.7 and NA.8 at z − hdis.",
+    "External pressure coefficients for zones A to E follow NA Table NA.4, interpolated on h/d, with the zones of BS EN 1991-1-4 Figure 7.5 (e = min(b, 2h)).",
+    "Where the walls of two buildings face each other with a gap between e/4 and e, funnelling coefficients of −1.6, −0.9 and −0.9 apply to zones A, B and C (NA.2.27 notes d and e).",
+    `Internal pressure is taken as the more onerous of +${project.options.cpi?.positive ?? 0.2} and ${project.options.cpi?.negative ?? -0.3} for glazed areas (BS EN 1991-1-4 7.2.9(6) Note 2) and as zero for solid and rainscreen areas (CWCT Part 2, 2.2.5.1).`,
+    project.options.verticalZoning
+      ? "Zone D is divided vertically in accordance with BS EN 1991-1-4 Figure 7.4."
+      : "In accordance with CWCT Part 2 clause 2.2.3 there is no horizontal zoning of wind pressure; the reference height is the building height for all zones (NA.2.26).",
+  ];
 }
 
 /** Builds the Word report (layout modelled on façade wind load calculation reports). */
 export async function buildReport(project: Project, blocks: ReportBlock[], opts: ReportOptions): Promise<Document> {
   const m = project.meta;
-  const s = project.site;
   const children: (Paragraph | Table)[] = [];
 
   // Cover
@@ -199,28 +258,17 @@ export async function buildReport(project: Project, blocks: ReportBlock[], opts:
 
   // Summary
   children.push(h1("Summary"));
-  children.push(p("Design wind loads are summarised below for solid areas (for example brickwork and rainscreen, cpi = 0) and glazed areas (including internal pressure). Values are the design pressures after the CWCT minimum or banding."));
+  children.push(p(SUMMARY_INTRO));
   for (const b of blocks) {
     children.push(h2(b.name));
     children.push(summaryTable(b.result));
   }
-  children.push(
-    p(
-      project.options.designBasis === "proprietary"
-        ? "Calculated pressures up to 2400 Pa are banded to 800, 1200, 1600, 2000 or 2400 Pa for proprietary systems, as CWCT Standard for systemised building envelopes Part 2, clause 2.2.4, Table 2.1."
-        : "For wind loads less than ±0.8 kN/m², the minimum design wind load on any element of the works is ±0.8 kN/m², as CWCT Standard for systemised building envelopes Part 2, clause 2.2.4, Table 2.1.",
-      { italics: true },
-    ),
-  );
+  children.push(p(designNote(project), { italics: true }));
 
   // 1 Introduction
   children.push(h1("1. Introduction"));
   children.push(h2("1.1 Site information"));
-  children.push(bullet(`Site altitude: ${fmt(s.altitude, 1)} m above ordnance datum.`));
-  children.push(bullet(`Terrain: ${s.terrain === "town" ? "Town (terrain categories III and IV)" : "Country (terrain categories I and II)"} as NA to BS EN 1991-1-4 NA.2.11.`));
-  children.push(bullet(`Fundamental basic wind velocity before altitude correction vb,map = ${fmt(s.vbMap, 1)} m/s from Figure NA.1 of the UK NA to BS EN 1991-1-4 (10-minute mean at 10 m in Country terrain, annual probability of exceedance 0.02).`));
-  children.push(bullet(`Orientation: the North elevation faces ${fmt(((s.orientation % 360) + 360) % 360, 0)}° from north.`));
-  children.push(bullet("Orography is not significant (NA Figure NA.2)."));
+  siteBullets(project).forEach((t) => children.push(bullet(t)));
   if (m.siteNotes) children.push(p(m.siteNotes));
   children.push(h2("1.2 Building dimensions"));
   children.push(
@@ -235,26 +283,9 @@ export async function buildReport(project: Project, blocks: ReportBlock[], opts:
   children.push(h2("2.1 Standards"));
   for (const k of ["EN", "NA", "PD", "CWCT"] as const) children.push(bullet(DOCUMENTS[k].title));
   children.push(h2("2.2 Scope"));
-  [
-    "The calculation gives the design wind loads on the façade of each block from BS EN 1991-1-4 with the UK National Annex, for the design of cladding, windows, doors, connections, brackets and fixings.",
-    "Pressures are calculated for the four orthogonal wind directions; each elevation takes the most onerous of the windward (zone D), side (zones A, B, C) and leeward (zone E) cases.",
-    "Thermal, movement, seismic and imposed loads are not part of this report.",
-    "Roofs, parapets, canopies, balconies, inset storeys and dominant openings are not covered.",
-  ].forEach((t) => children.push(bullet(t)));
+  SCOPE.forEach((t) => children.push(bullet(t)));
   children.push(h2("2.3 Methodology"));
-  [
-    "Peak velocity pressure qp = ce(z)·ce,T·qb (NA.2.17), with qb = ½·ρ·vb² and ρ = 1.226 kg/m³ (NA.2.18). vb = cdir·cseason·cprob·vb,map·calt (EN 4.2, NA.2.4–NA.2.8).",
-    project.site.cdirMethod === "unity"
-      ? "The directional factor is taken as 1.0 for all directions (NA Table NA.1 Note 4)."
-      : "The directional factor is the maximum of NA Table NA.1 within ±45° of the normal to each elevation (Table NA.1 Note 3).",
-    "The displacement height hdis follows BS EN 1991-1-4 A.5 for Town terrain. ce(z) and ce,T are read from NA Figures NA.7 and NA.8 at z − hdis.",
-    "External pressure coefficients for zones A to E follow NA Table NA.4, interpolated on h/d, with the zones of BS EN 1991-1-4 Figure 7.5 (e = min(b, 2h)).",
-    "Where the walls of two buildings face each other with a gap between e/4 and e, funnelling coefficients of −1.6, −0.9 and −0.9 apply to zones A, B and C (NA.2.27 notes d and e).",
-    `Internal pressure is taken as the more onerous of +${project.options.cpi?.positive ?? 0.2} and ${project.options.cpi?.negative ?? -0.3} for glazed areas (BS EN 1991-1-4 7.2.9(6) Note 2) and as zero for solid and rainscreen areas (CWCT Part 2, 2.2.5.1).`,
-    project.options.verticalZoning
-      ? "Zone D is divided vertically in accordance with BS EN 1991-1-4 Figure 7.4."
-      : "In accordance with CWCT Part 2 clause 2.2.3 there is no horizontal zoning of wind pressure; the reference height is the building height for all zones (NA.2.26).",
-  ].forEach((t) => children.push(bullet(t)));
+  methodology(project).forEach((t) => children.push(bullet(t)));
 
   // 3 Results
   children.push(new Paragraph({ children: [new PageBreak()] }));

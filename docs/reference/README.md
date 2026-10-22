@@ -8,8 +8,8 @@ The standards are licensed copies and are not committed. Put them here to rerun 
 | NA | NA to BS EN 1991-1-4-2005+A1-2010.pdf (Figures NA.7 and NA.8 on printed pp.13–14) |
 | PD | PD 6688-1-4-2015.pdf |
 | CWCT | Part 2 - Loads, fixings and movement.pdf |
-| BX | BXS-M2012-PRJ002-S-GFS-RP-20-001-XX (Brent Cross Plot 202 loads report) |
-| ISCA | GFS - Wind Load Calcs.docx and Wind load Calc.xlsx (ISCA Place, Exeter) |
+| RA | Report A (confidential project report, kept locally only) |
+| RB | Report B report and spreadsheet (confidential, kept locally only) |
 
 Regenerate `packages/engine/src/data/charts.ts`:
 

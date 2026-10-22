@@ -1,8 +1,8 @@
 {
-  "name": "Brent Cross Town Plot 202, main cladding of cores E & F (BX \u00a72.3)",
+  "name": "Report A, main cladding (RA \u00a72.3)",
   "description": "Town site, vb,map 21.6 m/s, A = 48 m, h = 28 m, 55 \u00d7 60 m plan rotated -41\u00b0, funnelling on all faces, cpi +0.2/-0.3. The report's ce readings are entered by hand; cdir, cpe and the net pressures are calculated.",
   "reference": {
-    "source": "BX \u00a72.3 table, p.10",
+    "source": "RA \u00a72.3 table, p.10",
     "printed": {
       "column order": "North, West, South, East (wind direction 319, 229, 139, 49)",
       "cdir": "0.98, 1.00, 0.86, 0.77",
@@ -24,7 +24,7 @@
       "orientation": -41
     },
     "building": {
-      "name": "Brent Cross Plot 202 cores E & F",
+      "name": "Report A main block",
       "widthNS": 55,
       "widthEW": 60,
       "height": 28

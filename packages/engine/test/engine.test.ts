@@ -38,7 +38,7 @@ describe("factors", () => {
     expect(cdirAt(240)).toBe(1.0);
     expect(cdirAt(345)).toBeCloseTo(0.8, 12);
     expect(cdirAt(-15)).toBeCloseTo(0.8, 12);
-    // Brent Cross: 319° → max over 274–364 = value at 274.
+    // Report A: 319° → max over 274–364 = value at 274.
     expect(cdirOrthogonal(319)).toBeCloseTo(0.99 + (0.91 - 0.99) * (4 / 30), 12);
     expect(cdirOrthogonal(229)).toBe(1.0);
   });
@@ -60,7 +60,7 @@ describe("factors", () => {
     expect(cpeWalls(0.1).D).toBe(0.7);
   });
   it("digitised charts agree with printed readings", () => {
-    // Brent Cross Plot 202: ce = 2.99 at 100 km, 28 m.
+    // Report A: ce = 2.99 at 100 km, 28 m.
     expect(ceOf(100, 28)).toBeCloseTo(2.99, 1);
     // PD 6688-1-4 example: ce ≈ 3.23 at 30 km, 33 m.
     expect(Math.abs(ceOf(30, 33) - 3.23)).toBeLessThan(0.04);
@@ -120,7 +120,7 @@ describe("runWind", () => {
     expect(s.funnelling).toBe(true);
     expect(r.advisories.some((a) => a.id === "ADV-DIGITISED")).toBe(true);
   });
-  it("matches the Brent Cross north column by hand", () => {
+  it("matches the Report A north column by hand", () => {
     const i = base();
     const r = runWind(i);
     if (!r.ok) throw new Error("fail");

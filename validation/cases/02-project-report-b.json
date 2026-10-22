@@ -1,8 +1,8 @@
 {
-  "name": "ISCA Place, Exeter, Block A peak velocity pressures (ISCA spreadsheet)",
+  "name": "Report B, Block A peak velocity pressures (Report B spreadsheet)",
   "description": "Town site, vb,map 23.5 m/s, A = 43 m, z = 17.66 m, orientation -10\u00b0. The spreadsheet's cdir, ce, ce,T and hdis are entered by hand; qp is compared.",
   "reference": {
-    "source": "ISCA spreadsheet, sheet Block A, rows 3-22",
+    "source": "Report B spreadsheet, sheet Block A, rows 3-22",
     "printed": {
       "qp N, E, S, W (kN/m\u00b2)": "0.4769, 0.4679, 0.7390, 0.5705",
       "rho (kg/m\u00b3)": 1.25
@@ -17,7 +17,7 @@
       "orientation": -10
     },
     "building": {
-      "name": "ISCA Place Block A",
+      "name": "Report B Block A",
       "widthNS": 16.8,
       "widthEW": 35.32,
       "height": 17.66

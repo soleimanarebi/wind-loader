@@ -235,5 +235,5 @@ Advisories:
 | NA | NA to BS EN 1991-1-4:2005+A1:2010 (UK National Annex) |
 | PD | PD 6688-1-4:2015 Background information to the National Annex to BS EN 1991-1-4 |
 | CWCT | CWCT Standard for systemised building envelopes, Part 2: Loads, fixings and movement |
-| BX | Example report: Brent Cross Town Plot 202, Loads and load combinations, GFS, 24 June 2022 |
-| ISCA | Example report and spreadsheet: ISCA Place, Exeter, Wind load calculation report, GFS, May 2026 |
+| RA | Report A: confidential project wind load report (not published) |
+| RB | Report B: confidential project wind load report and spreadsheet (not published) |

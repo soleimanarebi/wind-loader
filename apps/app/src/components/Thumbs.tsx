@@ -4,13 +4,13 @@ export function TemplateThumb({ id }: { id: string }) {
   return (
     <svg className="thumb" viewBox="0 0 64 44" width="64" height="44" aria-hidden="true">
       <path className="thumb-wind" d="M3 12h14M3 20h10M3 28h14" />
-      {id === "brent-cross" ? (
+      {id === "town-tower" ? (
         <>
           <rect className="thumb-bldg" x="26" y="6" width="16" height="34" />
           <rect className="thumb-bldg back" x="44" y="14" width="14" height="26" />
           <rect className="thumb-zone" x="26" y="6" width="4" height="34" />
         </>
-      ) : id === "isca" ? (
+      ) : id === "low-rise" ? (
         <>
           <rect className="thumb-bldg" x="22" y="20" width="16" height="20" />
           <rect className="thumb-bldg back" x="42" y="22" width="18" height="18" />

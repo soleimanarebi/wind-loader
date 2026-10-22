@@ -25,30 +25,30 @@ describe("templates", () => {
 
 describe("Results", () => {
   it("shows the design summary per elevation with sources", () => {
-    const p = tpl("brent-cross");
-    render(<Results result={runBlock(p, 0)} envelope="sealed" onEnvelope={() => {}} blockName="Cores" />);
+    const p = tpl("town-tower");
+    render(<Results result={runBlock(p, 0)} envelope="sealed" onEnvelope={() => {}} blockName="Tower" />);
     const rows = document.querySelectorAll(".summary tbody tr");
     expect(rows).toHaveLength(4);
     expect(screen.getAllByText(/Table NA\.4/).length).toBeGreaterThan(0);
     expect(screen.getByText(/ADV-DIGITISED/)).toBeTruthy();
   });
   it("lists input errors", () => {
-    const p = tpl("brent-cross");
+    const p = tpl("town-tower");
     p.blocks[0]!.building.height = -1;
-    render(<Results result={runBlock(p, 0)} envelope="sealed" onEnvelope={() => {}} blockName="Cores" />);
+    render(<Results result={runBlock(p, 0)} envelope="sealed" onEnvelope={() => {}} blockName="Tower" />);
     expect(screen.getByRole("status").textContent).toContain("Inputs incomplete");
   });
 });
 
 describe("Inputs", () => {
   it("shows template cards and edits the per-direction table", () => {
-    let project: Project = tpl("brent-cross");
+    let project: Project = tpl("town-tower");
     const update = (fn: (d: Project) => void) => {
       const d = cloneProject(project);
       fn(d);
       project = d;
     };
-    render(<Inputs project={project} blockIndex={0} onBlock={() => {}} update={update} onTemplate={() => {}} templateId="brent-cross" />);
+    render(<Inputs project={project} blockIndex={0} onBlock={() => {}} update={update} onTemplate={() => {}} templateId="town-tower" />);
     const cards = screen.getByRole("group", { name: "Example projects" }).querySelectorAll("button");
     expect(cards).toHaveLength(TEMPLATES.length);
     expect([...cards].every((c) => c.querySelector("svg"))).toBe(true);
@@ -68,36 +68,36 @@ describe("viewer geometry", () => {
     expect(facePoint("W", 0, 0, 10, 6)).toEqual([-5, 0, -3]);
   });
   it("builds envelope and zone segments that cover each elevation", () => {
-    const p = tpl("isca");
+    const p = tpl("low-rise");
     const r = runBlock(p, 0);
     if (!r.ok) throw new Error();
-    const env = faceSegments(r, "envelope", "sealed", 17.66);
+    const env = faceSegments(r, "envelope", "sealed", 15);
     for (const el of r.elevations) {
       const segs = env[el.face];
       expect(segs[0]!.from).toBe(0);
       expect(segs[segs.length - 1]!.to).toBeCloseTo(el.width, 9);
     }
-    const zones = faceSegments(r, "N", "sealed", 17.66);
+    const zones = faceSegments(r, "N", "sealed", 15);
     expect(zones.N.map((s) => s.zone)).toEqual(["D"]);
     expect(zones.S.map((s) => s.zone)).toEqual(["E"]);
-    expect(envelopeSegments(r.elevations[0]!, "sealed", 17.66)).toHaveLength(3);
+    expect(envelopeSegments(r.elevations[0]!, "sealed", 15)).toHaveLength(3);
   });
   it("colours suction red and pressure blue", () => {
     expect(pressureColour(-1, 1)).toBe("rgb(196, 46, 40)");
     expect(pressureColour(1, 1)).toBe("rgb(30, 96, 170)");
   });
   it("draws the elevation mark-up with design values", () => {
-    const r = runWind(toWindInput(tpl("brent-cross"), tpl("brent-cross").blocks[0]!));
+    const r = runWind(toWindInput(tpl("town-tower"), tpl("town-tower").blocks[0]!));
     if (!r.ok) throw new Error();
-    const svg = elevationSvg(r.elevations[0]!, "sealed", 28, "Cores <E & F>");
+    const svg = elevationSvg(r.elevations[0]!, "sealed", 36, "Tower <A & B>");
     expect(svg).toContain("Ws = −");
-    expect(svg).toContain("Cores &lt;E &amp; F>");
+    expect(svg).toContain("Tower &lt;A &amp; B>");
   });
 });
 
 describe("Word report", () => {
   it("builds a .docx with the summary, appendix and disclaimer", async () => {
-    const p = tpl("isca");
+    const p = tpl("low-rise");
     p.blocks.push({ ...structuredClone(p.blocks[0]!), id: "x", name: "Block C" });
     const doc = await buildReport(p, reportBlocks(p, runBlock), { disclaimer: DISCLAIMER });
     const buf = await Packer.toBuffer(doc);

@@ -3,8 +3,9 @@
 ## What this is
 A web tool for façade wind loads on the vertical walls of rectangular buildings to
 BS EN 1991-1-4:2005+A1:2010 with the UK National Annex, PD 6688-1-4 and the CWCT Standard for
-systemised building envelopes Part 2, plus a marketing site. The report output is modelled on the
-Glass & Façade Solutions wind load reports (ISCA Place, Brent Cross Plot 202).
+systemised building envelopes Part 2, plus a marketing site. The report output follows the layout of a
+consultant's façade wind load report. Client project names and data must never appear in
+the app, the site or the docs; the validation reports are referred to only as Report A and B.
 
 ## Layout (pnpm workspace, Node 22)
 - `packages/engine` — pure TypeScript calculation engine. No UI, no I/O.

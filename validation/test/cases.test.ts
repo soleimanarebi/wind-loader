@@ -18,12 +18,12 @@ describe("validation cases", () => {
   }
 });
 
-describe("Brent Cross with the digitised charts (no overrides)", () => {
-  const bx = cases.find((c) => c.file.startsWith("01"))!.data;
-  const input = structuredClone(bx.input);
+describe("Report A with the digitised charts (no overrides)", () => {
+  const ra = cases.find((c) => c.file.startsWith("01"))!.data;
+  const input = structuredClone(ra.input);
   for (const d of Object.values(input.directions)) delete d.overrides;
   const r = runWind(input);
-  // Printed in BX §2.3 (N, E, S, W order here).
+  // Printed in RA §2.3 (N, E, S, W order here).
   const printed = { qp: [0.88, 0.55, 0.68, 0.92], A: [-1.59, -1.0, -1.23, -1.65], D: [0.91, 0.57, 0.7, 0.95] };
   it("agrees with the printed qp and net pressures within 2%", () => {
     if (!r.ok) throw new Error(r.errors.join());
