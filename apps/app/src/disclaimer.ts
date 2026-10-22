@@ -1,4 +1,4 @@
-/** Shown in the app footer and in the Word report. */
+/** Shown in the app footer and in the PDF and Word reports. */
 export const DISCLAIMER =
   "Wind Loader is a design aid. It applies its authors' reading of BS EN 1991-1-4 with the UK National Annex, " +
   "PD 6688-1-4 and the CWCT Standard for systemised building envelopes, and has not been reviewed or endorsed by " +

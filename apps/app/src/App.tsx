@@ -70,12 +70,12 @@ export function App() {
 
   const [exporting, setExporting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const exportDocx = async () => {
+  const exportPdf = async () => {
     setExporting(true);
     setError(null);
     try {
-      const { exportReport } = await import("./report");
-      await exportReport(project, runBlock, DISCLAIMER);
+      const { exportPdfReport } = await import("./pdf");
+      await exportPdfReport(project, runBlock, DISCLAIMER);
     } catch (e) {
       setError((e as Error).message);
     } finally {
@@ -127,8 +127,8 @@ export function App() {
           <button type="button" className="btn-ghost" onClick={saveJson}>
             Save
           </button>
-          <button type="button" className="btn" onClick={exportDocx} disabled={!allOk || exporting} title={allOk ? "Word report for every block" : "Fix the inputs of every block first"}>
-            {exporting ? "Preparing…" : "Word report"}
+          <button type="button" className="btn" onClick={exportPdf} disabled={!allOk || exporting} title={allOk ? "PDF report for every block" : "Fix the inputs of every block first"}>
+            {exporting ? "Preparing…" : "PDF report"}
           </button>
         </div>
       </header>

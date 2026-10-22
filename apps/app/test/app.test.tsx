@@ -111,3 +111,15 @@ describe("Word report", () => {
     expect(xml).toContain("qualified engineer");
   });
 });
+
+describe("PDF report", () => {
+  it("builds a PDF with the summary, appendix and disclaimer", async () => {
+    const { buildPdfReport, pdfText } = await import("../src/pdf");
+    const p = tpl("town-tower");
+    const doc = await buildPdfReport(p, reportBlocks(p, runBlock), { disclaimer: DISCLAIMER, compress: false });
+    const text = doc.output();
+    expect(doc.getNumberOfPages()).toBeGreaterThan(3);
+    for (const t of ["Wind Load Calculation Report", "Appendix A: Calculation details", "NA Table NA.4", "qualified engineer", "Funnelling check"]) expect(text).toContain(t);
+    expect(pdfText("−0.80 kPa, θ ≤ 45°")).toBe("-0.80 kPa, theta <= 45°");
+  });
+});

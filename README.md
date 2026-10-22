@@ -7,7 +7,7 @@ building envelopes Part 2. Every value is traced to its document, clause and pag
 | --- | --- |
 | `packages/engine` | The calculation engine (pure TypeScript), with the sourced data and the digitised NA charts |
 | `validation` | Cases from real wind load reports, with expected values computed outside the engine |
-| `apps/app` | The checker: inputs, the building in 3D, elevation mark-ups, results and the Word report |
+| `apps/app` | The checker: inputs, the building in 3D, elevation mark-ups, results and the PDF report |
 | `apps/site` | The landing site with the contact form |
 | `docs/calc-spec.md` | The specification the engine implements |
 | `docs/open-questions.md` | Choices the documents leave open |

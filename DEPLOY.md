@@ -58,7 +58,7 @@ git push -u origin main
 ## 5. After deploying
 
 - Open both sites on a phone and a desktop.
-- In the checker, load each template and export the Word report.
+- In the checker, load each template and export the PDF report.
 - The `Content-Security-Policy` headers in each toml are strict (`script-src 'self'`). If you add analytics or a font service later, extend the policy, or those resources will be blocked.
 
 ## Run locally
