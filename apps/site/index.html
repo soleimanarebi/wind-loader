@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Wind Loader</title>
+    <meta name="description" content="Wind Loader works out façade wind loads to BS EN 1991-1-4, the UK National Annex and CWCT, shows the zones on every elevation in 3D, and traces every number to its source." />
+    <meta name="theme-color" content="#123b5c" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/src/site.css" />
+    <script type="module" src="/src/main.ts"></script>
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <header class="top" id="top">
+      <div class="wrap top-inner">
+        <a class="brand" href="/" aria-label="Wind Loader, home">
+          <svg viewBox="0 0 32 32" width="28" height="28" aria-hidden="true"><rect x="3" y="3" width="26" height="26" rx="5" fill="currentColor" /><path d="M7 12h12a3 3 0 1 0-3-3M7 17h16a3 3 0 1 1-3 3M7 22h8" stroke="var(--accent)" stroke-width="2.2" fill="none" stroke-linecap="round" /></svg>
+          <span>Wind Loader</span>
+        </a>
+        <nav aria-label="Main">
+          <ul class="nav">
+            <li><a href="#features">Features</a></li>
+            <li><a href="#how">How it works</a></li>
+            <li><a href="#validation">Validation</a></li>
+            <li><a href="#roadmap">Roadmap</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </nav>
+        <a class="btn btn-primary btn-small" href="%VITE_APP_URL%">Try the checker</a>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="wrap hero-inner">
+          <div class="hero-copy">
+            <p class="eyebrow">Façade wind loads · release 1</p>
+            <h1 id="hero-title">Wind loads for every elevation, with the working on show.</h1>
+            <p class="lead">
+              Enter the site, the building and the terrain in each direction. Wind Loader works out the peak velocity pressure
+              to BS EN 1991-1-4 and the UK National Annex, maps the corner and general zones onto each façade in 3D, and gives
+              the CWCT design pressures, each traced to its clause and page.
+            </p>
+            <div class="cta-row">
+              <a class="btn btn-primary" href="%VITE_APP_URL%">Try the checker</a>
+              <a class="btn btn-ghost" href="#how">See how it works</a>
+            </div>
+            <p class="fine">Free in your browser. Nothing you enter leaves your device.</p>
+          </div>
+          <figure class="hero-stage">
+            <div class="scene" id="scene" role="img" aria-label="A rectangular building in 3D with wind blowing onto its right-hand face, shown blue for pressure. The side wall facing you is red for suction, darkest in corner zone A at its upwind edge and lighter in zones B and C. Drag to rotate.">
+              <div class="gusts" aria-hidden="true"><span class="gust"></span><span class="gust"></span><span class="gust"></span></div>
+              <div class="bldg" id="bldg">
+                <div class="face f-front"></div>
+                <div class="face f-back storeys"></div>
+                <div class="face f-left"></div>
+                <div class="face f-right storeys"></div>
+                <div class="face f-roof"></div>
+              </div>
+            </div>
+            <ul class="key" aria-hidden="true">
+              <li><span class="k-d"></span>Zone D, pressure</li>
+              <li><span class="k-a"></span>Zone A, corner suction</li>
+              <li><span class="k-b"></span>Zone B</li>
+              <li><span class="k-c"></span>Zone C</li>
+            </ul>
+            <figcaption class="fine">Drag to rotate · an illustration, not a calculation</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section class="strip" aria-label="At a glance">
+        <div class="wrap strip-inner">
+          <p>
+            Release 1 covers vertical walls of rectangular buildings in the UK: peak velocity pressure in four directions,
+            zones A to E, funnelling between close buildings, sealed and rainscreen envelopes, and CWCT design pressures,
+            with a Word report.
+          </p>
+          <dl class="figures">
+            <div><dt>Wind directions per building</dt><dd>4</dd></div>
+            <div><dt>Reference documents read</dt><dd>4</dd></div>
+            <div><dt>Values guessed</dt><dd>0</dd></div>
+          </dl>
+        </div>
+      </section>
+
+      <section id="wind" aria-labelledby="wind-title">
+        <div class="wrap split">
+          <div>
+            <h2 id="wind-title">About wind on façades</h2>
+            <p>
+              The wind a façade has to resist depends on where the building is and what lies upwind. The basic wind speed comes
+              from the UK map and the site altitude; it is then reduced or increased by direction, season, the distance to the
+              sea and how much town the wind crosses on the way, and by the height of the building above its neighbours.
+            </p>
+            <p>
+              On the building itself the pressure is not uniform. The windward face is pushed, while the side walls are pulled
+              hardest at their upwind corners, where the flow separates. Two buildings close together can funnel the wind
+              between them and raise that suction further. A cladding system also sees the air pressure inside the building,
+              or, for a rainscreen, only part of the outside pressure.
+            </p>
+            <p class="source">Summarised from BS EN 1991-1-4 clauses 4 and 7, the UK National Annex NA.2.5 to NA.2.27, and CWCT Part 2 clause 2.2.</p>
+          </div>
+          <ul class="facts">
+            <li><strong>−1.2</strong><span>cpe for corner zone A on vertical walls, NA Table NA.4</span></li>
+            <li><strong>−1.6</strong><span>zone A when the wind funnels between buildings, NA.2.27 note e)</span></li>
+            <li><strong>1.226</strong><span>kg/m³, the air density for the UK, NA.2.18</span></li>
+            <li><strong>800 Pa</strong><span>minimum design wind pressure on a façade, CWCT Part 2 Table 2.1</span></li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="why" class="band" aria-labelledby="why-title">
+        <div class="wrap">
+          <h2 id="why-title">Why Wind Loader</h2>
+          <p class="section-lead">A façade wind calculation draws on four documents and two charts read by eye, and has to be repeated for every direction and elevation. The usual tools each leave a gap.</p>
+          <ul class="compare">
+            <li class="compare-card">
+              <h3>Spreadsheets</h3>
+              <p>Fast once set up, but chart readings and zone widths are typed in by hand, and the sheet is copied from job to job.</p>
+            </li>
+            <li class="compare-card">
+              <h3>Structural software</h3>
+              <p>Good for the frame, but cladding zones, funnelling and the CWCT design pressures are usually left to you.</p>
+            </li>
+            <li class="compare-card">
+              <h3>Hand calculations</h3>
+              <p>Clear and checkable, but slow to repeat for four directions, four elevations and several blocks.</p>
+            </li>
+            <li class="compare-card compare-ours">
+              <h3>Wind Loader</h3>
+              <p>The National Annex charts digitised, every value sourced, every zone drawn on the building, and a report laid out for a checker.</p>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="features" aria-labelledby="features-title">
+        <div class="wrap">
+          <h2 id="features-title">What it does</h2>
+          <ul class="cards">
+            <li class="card">
+              <h3>Peak velocity pressure</h3>
+              <p>Altitude, direction, season and probability factors, and exposure read from Figures NA.7 and NA.8 for each direction's shoreline and town distances.</p>
+            </li>
+            <li class="card">
+              <h3>Zones on every elevation</h3>
+              <p>Zones A to E for wind onto each face, reference heights from Figure 7.4, displacement height from Annex A.5 and the size factor from Table NA.3.</p>
+            </li>
+            <li class="card">
+              <h3>Funnelling</h3>
+              <p>Enter the gap to the neighbouring building and the NA.2.27 funnelling coefficients are applied where the gap and height rules say they should be.</p>
+            </li>
+            <li class="card">
+              <h3>Sealed and rainscreen</h3>
+              <p>Net pressure with internal pressure for glazing, or the CWCT reductions for ventilated and pressure-equalised rainscreens.</p>
+            </li>
+            <li class="card">
+              <h3>The building in 3D</h3>
+              <p>Zones coloured by net pressure on each face, a design suction envelope, and elevation mark-ups with the corner widths dimensioned.</p>
+            </li>
+            <li class="card">
+              <h3>A Word report</h3>
+              <p>Summary tables, design data, elevation drawings and an appendix of working for each block, ready to edit and issue.</p>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="software" class="band" aria-labelledby="software-title">
+        <div class="wrap">
+          <h2 id="software-title">The software</h2>
+          <p class="section-lead">Inputs on the left, the building in the middle, the loads on the right. Results update as you type.</p>
+          <figure class="shot">
+            <div class="shot-bar" aria-hidden="true"><span></span><span></span><span></span><code>Wind Loader · façade wind loads</code></div>
+            <img src="/img/app-full.webp" width="1440" height="900" alt="Wind Loader showing a town tower: site inputs on the left, the building in 3D with the zones for wind onto the east face in the centre, and design pressures by elevation on the right." loading="lazy" />
+          </figure>
+        </div>
+      </section>
+
+      <section id="how" aria-labelledby="how-title">
+        <div class="wrap">
+          <h2 id="how-title">How it works</h2>
+          <ol class="steps">
+            <li>
+              <span class="step-n" aria-hidden="true">01</span>
+              <h3>Describe the site and building</h3>
+              <p>Start from an example, then set the wind speed, altitude, orientation, plan size and height, and the terrain upwind in each direction.</p>
+              <img src="/img/step-inputs.webp" width="320" height="780" alt="The inputs column with example project cards and the site and wind fields." loading="lazy" />
+            </li>
+            <li>
+              <span class="step-n" aria-hidden="true">02</span>
+              <h3>Read the loads</h3>
+              <p>Design pressure and suction for each elevation, every zone case behind them, and the factors for each direction with their sources.</p>
+              <img src="/img/step-verify.webp" width="340" height="780" alt="The results column with the governing design pressures and a table by elevation." loading="lazy" />
+            </li>
+            <li>
+              <span class="step-n" aria-hidden="true">03</span>
+              <h3>Export the report</h3>
+              <p>Download the Word report and pass it to the engineer who signs the design off. The tool supports that review; it does not replace it.</p>
+              <img src="/img/step-report.webp" width="662" height="936" alt="A page of the Word report with the summary of design wind loads by elevation." loading="lazy" />
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <section id="results" class="band" aria-labelledby="results-title">
+        <div class="wrap">
+          <h2 id="results-title">Results</h2>
+          <p class="section-lead">The town tower example as the checker draws it.</p>
+          <ul class="gallery">
+            <li>
+              <p class="label">Zones for wind onto one face</p>
+              <img src="/img/render-zones.webp" width="704" height="606" alt="Building in 3D with pressure on the windward face and corner and general suction zones on the side wall." loading="lazy" />
+              <p class="caption">Zone D in blue on the windward face, zones A and B in red on the side.</p>
+            </li>
+            <li>
+              <p class="label">Design suction envelope</p>
+              <img src="/img/render-envelope.webp" width="704" height="606" alt="Building in 3D with the worst corner and general suction from any direction on every face." loading="lazy" />
+              <p class="caption">The worst case from any direction, as the façade is designed.</p>
+            </li>
+            <li>
+              <p class="label">Elevation mark-up</p>
+              <img src="/img/render-elevation.webp" width="704" height="395" alt="North elevation drawing with the corner zone widths dimensioned and the design pressures above." loading="lazy" />
+              <p class="caption">Corner widths and CWCT design values, as they appear in the report.</p>
+            </li>
+            <li>
+              <p class="label">Report · summary of loads</p>
+              <img src="/img/render-report.webp" width="830" height="520" alt="The summary table from the Word report, for rainscreen and glazed envelopes." loading="lazy" />
+              <p class="caption">Rainscreen and glazed values for each elevation.</p>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="validation" aria-labelledby="validation-title">
+        <div class="wrap">
+          <h2 id="validation-title">How it is validated</h2>
+          <dl class="metrics">
+            <div><dt>Automated tests</dt><dd id="test-count">64</dd></div>
+            <div><dt>Project reports reproduced</dt><dd>2</dd></div>
+            <div><dt>Agreement with independent hand checks</dt><dd>1 in 10<sup>5</sup></dd></div>
+            <div><dt>Values without a source</dt><dd>0</dd></div>
+          </dl>
+          <div class="callout">
+            <h3>Checked against real wind load reports</h3>
+            <p>
+              The calculation chain reproduces 44 values from a town-centre tower report and the peak velocity pressures of a
+              low-rise residential scheme, given the same chart readings, to 1 in 10<sup>5</sup>. With its own digitised
+              charts, Wind Loader agrees with the tower report's printed pressures within 2%. Expected results were computed by a
+              separate script, outside the engine, and each case notes where the printed figures differ and why, such as a
+              different air density.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section id="roadmap" class="band" aria-labelledby="roadmap-title">
+        <div class="wrap">
+          <h2 id="roadmap-title">Roadmap</h2>
+          <ul class="road">
+            <li class="road-card"><span class="tag tag-now">Available</span><h3>Walls of rectangular buildings</h3><p>Zones A to E, four directions, several blocks per project.</p></li>
+            <li class="road-card"><span class="tag tag-now">Available</span><h3>Funnelling and envelopes</h3><p>NA.2.27 funnelling, sealed glazing and CWCT rainscreens.</p></li>
+            <li class="road-card"><span class="tag tag-now">Available</span><h3>Word report</h3><p>Summary, design data, elevations and an appendix of working.</p></li>
+            <li class="road-card"><span class="tag tag-next">Planned</span><h3>Open questions settled</h3><p>Each choice the standards leave open, resolved from a source.</p></li>
+            <li class="road-card"><span class="tag tag-next">Planned</span><h3>Roofs, parapets and canopies</h3><p>Flat and pitched roofs, parapets and free-standing elements.</p></li>
+            <li class="road-card"><span class="tag tag-later">Later</span><h3>Orography and shared projects</h3><p>Hills and escarpments to Annex A.3, and projects you can share with a reviewer.</p></li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="about" aria-labelledby="about-title">
+        <div class="wrap narrow">
+          <h2 id="about-title">About</h2>
+          <p>
+            Wind Loader is an independent tool for façade engineers, cladding contractors and designers. It applies its
+            authors' reading of BS EN 1991-1-4 with the UK National Annex, PD 6688-1-4 and the CWCT
+            <cite>Standard for systemised building envelopes</cite>.
+          </p>
+          <p>
+            It is not produced, reviewed or endorsed by BSI, CEN or CWCT. Every design it touches must still be checked and
+            approved by a qualified structural engineer. If something looks wrong, please say so: corrections shape what comes next.
+          </p>
+        </div>
+      </section>
+
+      <section id="contact" class="band" aria-labelledby="contact-title">
+        <div class="wrap contact">
+          <div>
+            <h2 id="contact-title">Get in touch</h2>
+            <p>Questions, corrections, or a building shape you would like covered. We read every message and reply by email.</p>
+            <ul class="contact-points">
+              <li><strong>Bug or wrong result?</strong> Include the inputs, or attach the saved project file when you reply.</li>
+              <li><strong>Want a case covered?</strong> Tell us the building shape and the element you are loading.</li>
+            </ul>
+            <p class="fine">See the <a href="/privacy.html">privacy notice</a> for how messages are handled.</p>
+          </div>
+          <form class="form" name="contact" method="POST" action="/thanks.html" data-netlify="true" netlify-honeypot="company-website">
+            <input type="hidden" name="form-name" value="contact" />
+            <p class="hp" aria-hidden="true">
+              <label>Leave this empty <input name="company-website" tabindex="-1" autocomplete="off" /></label>
+            </p>
+            <div class="row">
+              <div class="field">
+                <label for="name">Name</label>
+                <input id="name" name="name" autocomplete="name" required />
+              </div>
+              <div class="field">
+                <label for="email">Email</label>
+                <input id="email" name="email" type="email" autocomplete="email" required />
+              </div>
+            </div>
+            <div class="row">
+              <div class="field">
+                <label for="organisation">Organisation <span class="opt">(optional)</span></label>
+                <input id="organisation" name="organisation" autocomplete="organization" />
+              </div>
+              <div class="field">
+                <label for="subject">Subject</label>
+                <select id="subject" name="subject" required>
+                  <option value="question">A question</option>
+                  <option value="correction">A correction or bug</option>
+                  <option value="case">A case to cover</option>
+                  <option value="other">Something else</option>
+                </select>
+              </div>
+            </div>
+            <div class="field">
+              <label for="message">Message</label>
+              <textarea id="message" name="message" rows="6" maxlength="2000" required aria-describedby="message-count"></textarea>
+              <span class="count" id="message-count" aria-live="polite">0 / 2000</span>
+            </div>
+            <div class="field check">
+              <input id="consent" name="consent" type="checkbox" value="yes" required />
+              <label for="consent">I agree that my name, email and message may be stored to reply to me, as described in the <a href="/privacy.html">privacy notice</a>.</label>
+            </div>
+            <button class="btn btn-primary" type="submit">Send message</button>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <div class="wrap">
+        <p class="foot-brand"><strong>Wind Loader</strong> · Façade wind loads, with the working on show.</p>
+        <p class="disclaimer">
+          <strong>Disclaimer.</strong> Wind Loader is a design aid. It applies its authors' reading of BS EN 1991-1-4 with the
+          UK National Annex, PD 6688-1-4 and the CWCT <cite>Standard for systemised building envelopes</cite>, and is
+          not produced, reviewed or endorsed by BSI, CEN, CWCT or any company or project named on this site. Exposure factors are
+          read from digitised National Annex charts. Results depend on the inputs you enter, several of which the standards
+          leave to the engineer. Every design must be checked and approved by a qualified structural engineer before use. No
+          liability is accepted for decisions based on its results.
+        </p>
+        <p class="foot-links">© <span id="year">2026</span> Wind Loader · <a href="/privacy.html">Privacy notice</a> · <a href="/#contact">Contact</a> · <a href="%VITE_APP_URL%">Open the checker</a></p>
+      </div>
+    </footer>
+  </body>
+</html>
