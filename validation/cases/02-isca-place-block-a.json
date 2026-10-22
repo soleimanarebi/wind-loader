@@ -1,0 +1,89 @@
+{
+  "name": "ISCA Place, Exeter, Block A peak velocity pressures (ISCA spreadsheet)",
+  "description": "Town site, vb,map 23.5 m/s, A = 43 m, z = 17.66 m, orientation -10\u00b0. The spreadsheet's cdir, ce, ce,T and hdis are entered by hand; qp is compared.",
+  "reference": {
+    "source": "ISCA spreadsheet, sheet Block A, rows 3-22",
+    "printed": {
+      "qp N, E, S, W (kN/m\u00b2)": "0.4769, 0.4679, 0.7390, 0.5705",
+      "rho (kg/m\u00b3)": 1.25
+    },
+    "gap": "The spreadsheet uses \u03c1 = 1.25 kg/m\u00b3 (EN recommended value); the UK NA.2.18 value is 1.226, so the engine's qp is 1.226/1.25 = 0.9808 of the spreadsheet's. The spreadsheet also takes hdis = 0.6\u00b7have = 10.2 m where A.15 gives min(0.8\u00b7have, 0.6\u00b7h) = 10.6 m, and reads cdir at the tabulated direction nearest the normal rather than the maximum within \u00b145\u00b0 (e.g. N 0.91 against 0.895); both are entered as printed here. Its cpe values are fixed (E = -0.6) rather than interpolated in h/d, and are not compared."
+  },
+  "input": {
+    "site": {
+      "vbMap": 23.5,
+      "altitude": 43,
+      "terrain": "town",
+      "orientation": -10
+    },
+    "building": {
+      "name": "ISCA Place Block A",
+      "widthNS": 16.8,
+      "widthEW": 35.32,
+      "height": 17.66
+    },
+    "directions": {
+      "N": {
+        "shorelineKm": 55,
+        "townKm": 5,
+        "have": 17,
+        "x": 27.1,
+        "overrides": {
+          "cdir": 0.91,
+          "ce": 2.12,
+          "ceT": 0.73,
+          "hdis": 10.2
+        }
+      },
+      "E": {
+        "shorelineKm": 43,
+        "townKm": 5,
+        "have": 17,
+        "x": 104,
+        "overrides": {
+          "cdir": 0.74,
+          "ce": 2.8,
+          "ceT": 0.82,
+          "hdis": 0
+        }
+      },
+      "S": {
+        "shorelineKm": 25,
+        "townKm": 5,
+        "have": 17,
+        "x": 122,
+        "overrides": {
+          "cdir": 0.93,
+          "ce": 2.8,
+          "ceT": 0.82,
+          "hdis": 0
+        }
+      },
+      "W": {
+        "shorelineKm": 80,
+        "townKm": 5,
+        "have": 17,
+        "x": 11.2,
+        "overrides": {
+          "cdir": 1.0,
+          "ce": 2.1,
+          "ceT": 0.73,
+          "hdis": 10.2
+        }
+      }
+    }
+  },
+  "expected": {
+    "directions.0.top.qp": 0.4677865950550544,
+    "directions.0.top.calt": 1.0383769375777134,
+    "directions.1.top.qp": 0.458924866186634,
+    "directions.1.top.calt": 1.0383769375777134,
+    "directions.2.top.qp": 0.7248431642892984,
+    "directions.2.top.calt": 1.0383769375777134,
+    "directions.3.top.qp": 0.5595622678053727,
+    "directions.3.top.calt": 1.0383769375777134
+  },
+  "tolerance": {
+    "relative": 1e-05
+  }
+}

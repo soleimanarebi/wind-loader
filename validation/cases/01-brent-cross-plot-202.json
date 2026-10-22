@@ -1,0 +1,131 @@
+{
+  "name": "Brent Cross Town Plot 202, main cladding of cores E & F (BX \u00a72.3)",
+  "description": "Town site, vb,map 21.6 m/s, A = 48 m, h = 28 m, 55 \u00d7 60 m plan rotated -41\u00b0, funnelling on all faces, cpi +0.2/-0.3. The report's ce readings are entered by hand; cdir, cpe and the net pressures are calculated.",
+  "reference": {
+    "source": "BX \u00a72.3 table, p.10",
+    "printed": {
+      "column order": "North, West, South, East (wind direction 319, 229, 139, 49)",
+      "cdir": "0.98, 1.00, 0.86, 0.77",
+      "vb (m/s)": "21.98, 22.41, 19.32, 17.36",
+      "qp (kN/m\u00b2)": "0.88, 0.92, 0.68, 0.55",
+      "cpe,D / cpe,E": "0.73 / -0.36 (N, S), 0.73 / -0.37 (W, E)",
+      "wnet,A": "-1.59, -1.65, -1.23, -1.00",
+      "wnet,B = wnet,C": "-0.97, -1.01, -0.75, -0.61",
+      "wnet,D": "0.91, 0.95, 0.70, 0.57",
+      "wnet,E": "-0.49, -0.52, -0.38, -0.32"
+    },
+    "gap": "All printed values agree to the second decimal, allowing for the report truncating rather than rounding some values (qp N 0.8856 printed 0.88). Without the overrides, the digitised Figure NA.7 gives ce = 2.991 (N, S, W) and 3.034 (E, 60 km) against the printed 2.99 and 3.01; the E reading differs by 0.8%, within chart reading tolerance (OQ-01)."
+  },
+  "input": {
+    "site": {
+      "vbMap": 21.6,
+      "altitude": 48,
+      "terrain": "town",
+      "orientation": -41
+    },
+    "building": {
+      "name": "Brent Cross Plot 202 cores E & F",
+      "widthNS": 55,
+      "widthEW": 60,
+      "height": 28
+    },
+    "directions": {
+      "N": {
+        "shorelineKm": 100,
+        "townKm": 0.1,
+        "have": 0,
+        "x": 20,
+        "gap": 28,
+        "overrides": {
+          "ce": 2.99,
+          "ceT": 1.0
+        }
+      },
+      "E": {
+        "shorelineKm": 60,
+        "townKm": 0.1,
+        "have": 0,
+        "x": 20,
+        "gap": 27.5,
+        "overrides": {
+          "ce": 3.01,
+          "ceT": 1.0
+        }
+      },
+      "S": {
+        "shorelineKm": 100,
+        "townKm": 0.1,
+        "have": 0,
+        "x": 20,
+        "gap": 28,
+        "overrides": {
+          "ce": 2.99,
+          "ceT": 1.0
+        }
+      },
+      "W": {
+        "shorelineKm": 100,
+        "townKm": 0.1,
+        "have": 0,
+        "x": 20,
+        "gap": 27.5,
+        "overrides": {
+          "ce": 2.99,
+          "ceT": 1.0
+        }
+      }
+    },
+    "options": {
+      "funnelling": "conservative"
+    }
+  },
+  "expected": {
+    "directions.0.cdir": 0.9793333333333333,
+    "directions.0.top.vb": 21.980006870255316,
+    "directions.0.top.qp": 0.8854974411049291,
+    "directions.0.cpe.D": 0.7288888888888889,
+    "directions.0.cpe.E": -0.35777777777777775,
+    "case:N:D:N:net.sealed.pressure": 0.9110784782924048,
+    "case:S:E:N:net.sealed.suction": -0.49391079492741596,
+    "case:E:A:N:net.sealed.suction": -1.5938953939888725,
+    "case:E:B:N:net.sealed.suction": -0.9740471852154221,
+    "case:W:A:N:net.sealed.suction": -1.5938953939888725,
+    "case:W:B:N:net.sealed.suction": -0.9740471852154221,
+    "directions.1.cdir": 0.7733333333333333,
+    "directions.1.top.vb": 17.35657451973871,
+    "directions.1.top.qp": 0.5558466654525811,
+    "directions.1.cpe.D": 0.7345454545454545,
+    "directions.1.cpe.E": -0.3690909090909091,
+    "case:E:D:E:net.sealed.pressure": 0.5750486411682157,
+    "case:W:E:E:net.sealed.suction": -0.3163272841575598,
+    "case:S:A:E:net.sealed.suction": -1.000523997814646,
+    "case:S:B:E:net.sealed.suction": -0.6114313319978393,
+    "case:N:A:E:net.sealed.suction": -1.000523997814646,
+    "case:N:B:E:net.sealed.suction": -0.6114313319978393,
+    "directions.2.cdir": 0.8606666666666667,
+    "directions.2.top.vb": 19.316670435329893,
+    "directions.2.top.qp": 0.6839056686558302,
+    "directions.2.cpe.D": 0.7288888888888889,
+    "directions.2.cpe.E": -0.35777777777777775,
+    "case:S:D:S:net.sealed.pressure": 0.7036629435281098,
+    "case:N:E:S:net.sealed.suction": -0.38146738407247416,
+    "case:W:A:S:net.sealed.suction": -1.2310302035804943,
+    "case:W:B:S:net.sealed.suction": -0.7522962355214133,
+    "case:E:A:S:net.sealed.suction": -1.2310302035804943,
+    "case:E:B:S:net.sealed.suction": -0.7522962355214133,
+    "directions.3.cdir": 1.0,
+    "directions.3.top.vb": 22.443846361731094,
+    "directions.3.top.qp": 0.9232647126088426,
+    "directions.3.cpe.D": 0.7345454545454545,
+    "directions.3.cpe.E": -0.3690909090909091,
+    "case:W:D:W:net.sealed.pressure": 0.9551593117716934,
+    "case:E:E:W:net.sealed.suction": -0.5254215546301232,
+    "case:N:A:W:net.sealed.suction": -1.6618764826959167,
+    "case:N:B:W:net.sealed.suction": -1.015591183869727,
+    "case:S:A:W:net.sealed.suction": -1.6618764826959167,
+    "case:S:B:W:net.sealed.suction": -1.015591183869727
+  },
+  "tolerance": {
+    "relative": 1e-05
+  }
+}
